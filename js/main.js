@@ -1,10 +1,13 @@
 $(document).ready(function(){
-    $('.slides>li').hammer({drag_lock_to_axis: true}).on('dragleft dragright dragdown release', handleGestures);
-
+    $('.slides>li').hammer({drag_lock_to_axis: true}).on('dragleft dragright dragdown release', handleGestures).on('transitionend',function(){ animating = false; });
 })
+
+animating = false;
 
 function handleGestures(ev){
     
+    if(animating) return; // Don't allow gestures while animation is running
+
     var _this = $(this);
 
     // disable browser scrolling
@@ -18,7 +21,7 @@ function handleGestures(ev){
             console.log('dragright')
 
             var offset = -(_this.outerWidth()-ev.gesture.deltaX);
-            _this.next().show().css('-webkit-transform', 'translate3d('+offset+'px,0,0)');
+            _this.next().css('-webkit-transform', 'translate3d('+offset+'px,0,0)');
 
             break;
 
@@ -61,13 +64,16 @@ function handleGestures(ev){
 }
 
 function next(elem){
+    animating = true;
     elem.css('-webkit-transform', 'translate3d(-'+elem.outerWidth()+'px,0,0)');
 }
 
 function prev(elem){
-    elem.next().show().css('-webkit-transform', 'translate3d(0,0,0)');
+    animating = true;
+    elem.next().css('-webkit-transform', 'translate3d(0,0,0)');
 }
 
 function resetPosition(elem){
+    animating = true;
     elem.css('-webkit-transform', 'translate3d(0,0,0)');
 }
