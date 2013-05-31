@@ -1,5 +1,4 @@
 $(document).ready(function(){
-
     $('.slides>li').hammer({drag_lock_to_axis: true}).on('dragleft dragright dragdown release', handleGestures);
 
 })
@@ -41,7 +40,10 @@ function handleGestures(ev){
             if(ev.gesture.deltaY < 60) _this.css('-webkit-transform', 'translate3d(0,'+ev.gesture.deltaY+'px,0)');
 
             break;
+
         case 'release':
+            if(ev.gesture.deltaY === 0 && ev.gesture.deltaY === 0) break; // No gesture performed
+
             console.log('release');
             $('.slides>li').removeClass('noAnimation');
             // more then 50% moved, navigate
@@ -51,7 +53,7 @@ function handleGestures(ev){
             } else if(ev.gesture.direction == 'left') {
                 next(_this);
             } else {
-                reset(_this);
+                resetPosition(_this);
             }
 
             break;
@@ -66,6 +68,6 @@ function prev(elem){
     elem.next().show().css('-webkit-transform', 'translate3d(0,0,0)');
 }
 
-function reset(elem){
+function resetPosition(elem){
     elem.css('-webkit-transform', 'translate3d(0,0,0)');
 }
