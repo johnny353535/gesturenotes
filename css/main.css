@@ -27,7 +27,7 @@ body {
   transition: all .3s;
   height: 100%;
   width: 100%;
-  padding: 5em;
+  padding: 2.5em 3em;
 }
 #notes .slides > li p {
   font-weight: 300;
