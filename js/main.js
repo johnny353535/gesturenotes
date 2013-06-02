@@ -2,7 +2,8 @@ $(document).ready(function(){
     $('.slides>li').hammer({drag_lock_to_axis: true}).on('dragleft dragright dragdown release', handleGestures).on('transitionend',function(){ animating = false; });
 })
 
-animating = false;
+var animating = false;
+var gesture = false;
 
 function handleGestures(ev){
     
@@ -23,6 +24,8 @@ function handleGestures(ev){
             var offset = -(_this.outerWidth()-ev.gesture.deltaX);
             _this.next().css('-webkit-transform', 'translate3d('+offset+'px,0,0)');
 
+            gesture = true;
+
             break;
 
         case 'dragleft': // <--o
@@ -33,6 +36,8 @@ function handleGestures(ev){
 
             _this.css('-webkit-transform', 'translate3d('+ev.gesture.deltaX+'px,0,0)');
 
+            gesture = true;
+
             break;
 
         case 'dragdown':
@@ -42,12 +47,15 @@ function handleGestures(ev){
 
             if(ev.gesture.deltaY < 60) _this.css('-webkit-transform', 'translate3d(0,'+ev.gesture.deltaY+'px,0)');
 
+            gesture = true;
+
             break;
 
         case 'release':
-            if(ev.gesture.deltaY === 0 && ev.gesture.deltaY === 0) break; // No gesture performed
 
-            console.log('release');
+            if(!gesture) break; // Only allow release after gestures
+
+            console.log('release',ev.gesture );
             $('.slides>li').removeClass('noAnimation');
             // more then 50% moved, navigate
 
@@ -58,6 +66,8 @@ function handleGestures(ev){
             } else {
                 resetPosition(_this);
             }
+
+            gesture = false;
 
             break;
     }
